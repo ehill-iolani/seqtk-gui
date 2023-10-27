@@ -3,29 +3,24 @@
 
 library(shiny)
 library(reticulate)
-library(bslib)
 library(shinycssloaders)
 
-# Lazy need it to work
-outname <- "sample.fasta"
+# Lazy; I need it to work so thats why this is here. yeah yeah its bad practice
+# but I dont care. I'll fix it later.
+outname <- "output.fasta"
 
 # User input for .fasta file upload
 ui <- shinyUI(fluidPage(
-  theme = bs_theme(bootswatch = "sandstone"),
+  # theme = bs_theme(bootswatch = "sandstone"),
   titlePanel("AIN Seqtk Fastq to Fasta"),
     sidebarLayout(
     sidebarPanel(
       fileInput("file1", "Choose .fastq file to upload",
         accept = c(".fastq", ".fastq.gz", ".fq", ".fq.gz")),
-      actionButton("convert", "CONVERT FASTQ TO FASTA")),
+      actionButton("convert", "CONVERT FASTQ TO FASTA"),
+      downloadButton("downloadData", "Download Results")),
     mainPanel(
-      withSpinner(verbatimTextOutput("results"))),
-  ),
-  tabPanel("Output FASTA",
-      fluidPage(
-        headerPanel("FASTA Output"),
-        downloadButton("downloadData", "Download")
-      )
+      withSpinner(verbatimTextOutput("results")))
   )
 ))
 
@@ -37,8 +32,10 @@ server <- function(input, output, session) {
         command <- paste("conda run -n seqtk seqtk seq -a", input$file1, ">", outname)
         system(command, intern = TRUE)
 
+        # Checks if file was created
         outcheck <- grep(outname, system("ls", intern = TRUE))
 
+        # If it was created, return success message
         if (length(outcheck) > 0) {
           outtext <- "Conversion completed succesfully"
         } else {
@@ -49,15 +46,18 @@ server <- function(input, output, session) {
 
         return(combo)})
 
+  # Reads in .fasta file generated from the conversion
   fasta <- reactiveFileReader(3000,
                               session,
                               filePath = outname,
                               readFunc = readLines)
 
+  # Displays success or fail message
   output$results <- renderText({
     data()$outtext
   })
 
+  # Downloads .fasta file
   output$downloadData <- downloadHandler(
     filename = function() {
       paste0(outname)
