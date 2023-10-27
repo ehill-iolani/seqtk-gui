@@ -4,7 +4,7 @@ Rshiny app for fastq to fasta conversion using seqtk. This is a dry run for givi
 # Installation
 ```
 docker build -t seqtk-gui:local .
-docker run -d --name seqtk-gui -p 8080:3838 seqtk:local
+docker run -d --name seqtk-gui -p 8080:3838 seqtk-gui:local
 ```
 
 # Instructions
