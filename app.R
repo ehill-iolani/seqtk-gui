@@ -33,8 +33,7 @@ server <- function(input, output, session) {
         system(command, intern = TRUE)
 
         # Checks if file was created
-        fileout <- paste0("/home/", outname)
-        outcheck <- grep(fileout, system("ls /home/", intern = TRUE))
+        outcheck <- grep(outname, system("ls /home/", intern = TRUE))
 
         # If it was created, return success message
         if (length(outcheck) > 0) {
