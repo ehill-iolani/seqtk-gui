@@ -34,7 +34,7 @@ server <- function(input, output, session) {
 
         # Checks if file was created
         fileout <- paste0("/home/", outname)
-        outcheck <- grep(fileout, system("ls", intern = TRUE))
+        outcheck <- grep(fileout, system("ls /home/", intern = TRUE))
 
         # If it was created, return success message
         if (length(outcheck) > 0) {
@@ -50,7 +50,7 @@ server <- function(input, output, session) {
   # Reads in .fasta file generated from the conversion
   fasta <- reactiveFileReader(3000,
                               session,
-                              filePath = outname,
+                              filePath = paste0("/home/", outname),
                               readFunc = readLines)
 
   # Displays success or fail message
