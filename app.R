@@ -29,7 +29,7 @@ server <- function(input, output, session) {
   data <- eventReactive(input$convert, {
         # Makes output file have .fasta extension
         outname <- sub(".*", "sample.fasta", input$file1)
-        command <- paste0("conda run -n seqtk seqtk seq -a ", input$file1, " >", " /home/", outname)
+        command <- paste0("seqtk seq -a ", input$file1, " >", " /home/", outname)
         system(command, intern = TRUE)
 
         # Checks if file was created
