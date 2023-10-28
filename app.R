@@ -28,7 +28,7 @@ ui <- shinyUI(fluidPage(
 server <- function(input, output, session) {
   data <- eventReactive(input$convert, {
         # Makes output file have .fasta extension
-        outname <- sub(".*", "sample.fasta", input$file1)
+        outname <- sub(".*", "output.fasta", input$file1)
         command <- paste0("seqtk seq -a ", input$file1, " >", " /home/", outname)
         system(command, intern = TRUE)
 
